@@ -1,0 +1,46 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.0.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+	// for deploy war - id 'war'
+}
+
+group = 'com.course'
+version = '1.0.0'
+sourceCompatibility = '1.10'
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+ext{
+ commonsLang3Version = '3.8.1'
+ elasticSearchVersion='6.5.0'
+ micrometerRegistryVersion ='1.1.0'
+}
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	compile "org.apache.commons:commons-lang3:${commonsLang3Version}",
+	"org.elasticsearch.client:transport:${elasticSearchVersion}",
+	"io.micrometer:micrometer-registry-elastic:${micrometerRegistryVersion}"
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	
+	//for deploy war - providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
+}
+
+test {
+	useJUnitPlatform()
+}
